@@ -1,45 +1,5 @@
+import { getDay } from "date-fns";
 import { getMenu } from "../../getMenu";
-
-/**
- * 
- *  const payload = {
-    text: "Danny Torrence left a 1 star review for your property.",
-    blocks: [
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: "Danny Torrence left the following review for your property:",
-        },
-      },
-      {
-        type: "section",
-        block_id: "section567",
-        text: {
-          type: "mrkdwn",
-          text: "<https://example.com|Overlook Hotel> \n :star: \n Doors had too many axe holes, guest in room 237 was far too rowdy, whole place felt stuck in the 1920s.",
-        },
-        accessory: {
-          type: "image",
-          image_url:
-            "https://is5-ssl.mzstatic.com/image/thumb/Purple3/v4/d3/72/5c/d3725c8f-c642-5d69-1904-aa36e4297885/source/256x256bb.jpg",
-          alt_text: "Haunted hotel image",
-        },
-      },
-      {
-        type: "section",
-        block_id: "section789",
-        fields: [
-          {
-            type: "mrkdwn",
-            text: "*Average Rating*\n1.0",
-          },
-        ],
-      },
-    ],
-  };
-
- */
 
 type SlackPayload = {
   dayTitle: string;
@@ -81,10 +41,17 @@ function removeLineBreaks(string: string) {
   return string.replace(/\s+/g, " ").trim();
 }
 
-export async function GET(request: Request) {
-  const menu = await getMenu();
+function isWednesday(date: Date): boolean {
+  return getDay(date) === 3;
+}
 
-  const todaysMenu = menu.find((day) => day.today);
+export async function GET(request: Request) {
+  const menu = await getMenu("det-velkendte");
+  const menuTwo = await getMenu("den-groenne");
+
+  const todaysMenu = isWednesday(new Date())
+    ? menuTwo.find((day) => day.today)
+    : menu.find((day) => day.today);
 
   const payload = {
     dayTitle: todaysMenu.dateFormatted,

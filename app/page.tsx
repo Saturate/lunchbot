@@ -3,7 +3,7 @@ import { getMenu } from "./getMenu";
 import styles from "./page.module.css";
 
 export default async function SlugPage() {
-  const menu = await getMenu();
+  const menu = await getMenu("det-velkendte");
 
   return (
     <section>
