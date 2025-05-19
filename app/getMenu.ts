@@ -2,6 +2,7 @@ import { parse } from "node-html-parser";
 import unencodehtml from "./unencodehtml";
 import { parse as parseDate, formatRelative, subDays, isToday } from "date-fns";
 import { da } from "date-fns/locale";
+import parseDescription from "./utils/parseDescription";
 
 function parseMeyerDate(date) {
   // 23 maj, 2025
@@ -48,20 +49,15 @@ export async function getMenu(menuId: keyof typeof menus) {
             )?.innerText
           );
 
-          // Remove allergens elements from HTML
-          display
-            .querySelectorAll('[ng-if="showAllergens"]')
-            .forEach((x) => x.remove());
+          const description = display.querySelector(
+            ".menu-recipe-display__description"
+          );
 
           return {
             title: unencodehtml(
               display.querySelector(".menu-recipe-display__title").innerText
             ),
-            content: unencodehtml(
-              display.querySelector(".menu-recipe-display__description")
-                .innerText
-            ),
-            allergens: allergens,
+            menuItems: parseDescription(description),
           };
         });
 
@@ -69,6 +65,7 @@ export async function getMenu(menuId: keyof typeof menus) {
 
       return {
         menuId: menuId,
+        menuName: menus[menuId].contentTab,
         id: day.getAttribute("id"),
         dateFormatted: day.getAttribute("aria-label"),
         date: menuDate,

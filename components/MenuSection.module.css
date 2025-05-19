@@ -1,0 +1,17 @@
+function MenuSections(menu) {
+  return (
+    <Fragment key={todaysMenu.date + section.title}>
+      <h4 className={styles.menuSection}>{section.title}</h4>
+      {section.menuItems.map(({ item, allergens }) => {
+        return (
+          <p key={item}>
+            {item}
+            {allergens ? (
+              <span className={styles.allergens}>{allergens}</span>
+            ) : null}
+          </p>
+        );
+      })}
+    </Fragment>
+  );
+}

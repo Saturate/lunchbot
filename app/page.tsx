@@ -31,14 +31,17 @@ export default async function MainPage() {
               return (
                 <Fragment key={day.date + section.title}>
                   <h4 className={styles.menuSection}>{section.title}</h4>
-                  <p>
-                    {section.content}
-                    {section.allergens ? (
-                      <span className={styles.allergens}>
-                        {section.allergens}
-                      </span>
-                    ) : null}
-                  </p>
+
+                  {section.menuItems.map(({ item, allergens }) => {
+                    return (
+                      <p key={item}>
+                        {item}
+                        {allergens ? (
+                          <span className={styles.allergens}>{allergens}</span>
+                        ) : null}
+                      </p>
+                    );
+                  })}
                 </Fragment>
               );
             })}

@@ -45,6 +45,22 @@ function isWednesday(date: Date): boolean {
   return getDay(date) === 3;
 }
 
+function descriptionDisplay(
+  menuItems: Awaited<
+    ReturnType<typeof getMenu>
+  >[0]["menuSections"][0]["menuItems"]
+) {
+  return menuItems.map((items) => removeLineBreaks(items.item)).join("\n");
+}
+
+function allergensDisplay(
+  menuItems: Awaited<
+    ReturnType<typeof getMenu>
+  >[0]["menuSections"][0]["menuItems"]
+) {
+  return menuItems.map((items) => removeLineBreaks(items.allergens)).join("\n");
+}
+
 export async function GET(request: Request) {
   const menu = await getMenu("det-velkendte");
   const menuTwo = await getMenu("den-groenne");
@@ -55,28 +71,27 @@ export async function GET(request: Request) {
 
   const payload = {
     dayTitle: todaysMenu.dateFormatted,
-
+    menuName: todaysMenu.menuName,
     hotDishTitle: removeLineBreaks(todaysMenu.menuSections[0].title),
-    hotDishDescription: removeLineBreaks(todaysMenu.menuSections[0].content),
-    hotDishAllergens: removeLineBreaks(todaysMenu.menuSections[0].allergens),
+    hotDishDescription: descriptionDisplay(
+      todaysMenu.menuSections[0].menuItems
+    ),
+    hotDishAllergens: undefined,
 
     deliTitle: removeLineBreaks(todaysMenu.menuSections[1].title),
-    deliDescription: removeLineBreaks(todaysMenu.menuSections[1].content),
-    deliAllergens: removeLineBreaks(todaysMenu.menuSections[1].allergens),
+    deliDescription: descriptionDisplay(todaysMenu.menuSections[1].menuItems),
+    deliAllergens: undefined,
 
     salatTitle: removeLineBreaks(todaysMenu.menuSections[2].title),
-    salatDescription: removeLineBreaks(todaysMenu.menuSections[2].content),
-    salatAllergens: removeLineBreaks(todaysMenu.menuSections[2].allergens),
+    salatDescription: descriptionDisplay(todaysMenu.menuSections[2].menuItems),
+    salatAllergens: undefined,
 
     breadTitle: removeLineBreaks(todaysMenu.menuSections[3].title),
-    breadDescription: removeLineBreaks(todaysMenu.menuSections[3].content),
-    breadAllergens: removeLineBreaks(todaysMenu.menuSections[3].allergens),
+    breadDescription: descriptionDisplay(todaysMenu.menuSections[3].menuItems),
+    breadAllergens: undefined,
   };
 
-  sendSlackMessage(
-    "https://hooks.slack.com/triggers/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",
-    payload
-  );
+  sendSlackMessage(process.env.SLACK_WEBHOOK, payload);
 
   return Response.json(payload);
 }
