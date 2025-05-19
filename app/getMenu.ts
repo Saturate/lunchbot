@@ -28,7 +28,6 @@ export async function getMenu(menuId: keyof typeof menus) {
   const root = parse(response);
 
   const menuHtml = root?.querySelector(".week-menu");
-  const menuDays = menuHtml.querySelectorAll(".week-menu-day__days");
   const days = menuHtml
     .querySelectorAll(".week-menu-day__header li h5")
     .map((day) => {
@@ -43,12 +42,6 @@ export async function getMenu(menuId: keyof typeof menus) {
       const menuSections = dayHtml
         .querySelectorAll(".menu-recipe-display")
         .map((display) => {
-          const allergens = unencodehtml(
-            display.querySelector(
-              '.menu-recipe-display__description span[ng-if="showAllergens"]'
-            )?.innerText
-          );
-
           const description = display.querySelector(
             ".menu-recipe-display__description"
           );

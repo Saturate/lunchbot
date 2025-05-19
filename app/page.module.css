@@ -1,9 +1,3 @@
-.allergens {
-  color: #7c7c7c;
-  font-size: 0.8em;
-  display: block;
-}
-
 .main {
   border: 1px solid #ccc;
   padding: 0 3em;
@@ -21,10 +15,6 @@
 }
 
 .dayHeaderLink {
-  color: #e1e1e1;
+  color: var(--text-color);
   text-decoration: none;
-}
-
-.menuSection {
-  font-size: 1.4em;
 }

@@ -1,7 +1,7 @@
-import { Fragment } from "react";
 import styles from "../page.module.css";
-import { format, isWednesday } from "date-fns";
+import { isWednesday } from "date-fns";
 import { getMenu } from "../getMenu";
+import MenuSection from "../../components/MenuSection";
 
 export async function generateMetadata() {
   return {
@@ -27,19 +27,7 @@ export default async function TodayPage() {
         </h2>
         {todaysMenu.menuSections.map((section) => {
           return (
-            <Fragment key={todaysMenu.date + section.title}>
-              <h4 className={styles.menuSection}>{section.title}</h4>
-              {section.menuItems.map(({ item, allergens }) => {
-                return (
-                  <p key={item}>
-                    {item}
-                    {allergens ? (
-                      <span className={styles.allergens}>{allergens}</span>
-                    ) : null}
-                  </p>
-                );
-              })}
-            </Fragment>
+            <MenuSection menu={section} key={todaysMenu.date + section.title} />
           );
         })}
       </section>

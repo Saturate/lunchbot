@@ -1,0 +1,37 @@
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+:root {
+  --background: #292c35;
+  --background-darker: #1c1f27;
+  --text-color: #e1e1e1;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #fff;
+    --background-darker: #cdcdcd;
+    --text-color: #292c35;
+  }
+}
+
+:root.light {
+  --background: #fff;
+  --background-darker: #cdcdcd;
+  --text-color: #292c35;
+}
+
+body {
+  color-scheme: dark;
+  background-color: var(--background);
+  color: var(--text-color);
+  transition: background 0.2s linear;
+  padding: 0;
+  margin: 0;
+}

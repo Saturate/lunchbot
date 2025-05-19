@@ -6,7 +6,6 @@ type MenuItems = { item: string; allergens: string }[] | undefined;
 export default function parseDescription(menuNode: HTMLElement): MenuItems {
   const menuItems = [];
   menuNode.childNodes.forEach((innerNode, index, arr) => {
-    console.log("innerNode", innerNode.innerText.trim());
     if (innerNode.nodeType === 3 && innerNode.innerText.trim() !== "") {
       const siblingNodesAfter = menuNode.childNodes.slice(
         index + 1,

@@ -1,5 +1,14 @@
-.body {
-  background: #272727;
-  color: #e1e1e1;
-  padding: 3em;
+.header {
+  padding: 0.5em;
+  background: var(--background-darker);
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s linear;
+
+  .name {
+    font-size: 1em;
+    flex: 1;
+    margin: 0;
+  }
 }

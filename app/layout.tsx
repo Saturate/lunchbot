@@ -1,7 +1,9 @@
 import clsx from "clsx";
 import styles from "./layout.module.css";
+import "./global.css";
 import { Analytics } from "@vercel/analytics/next";
 import { Jersey_25 } from "next/font/google";
+import ThemeSwitcher from "../components/ThemeSwitcher";
 
 type Props = {
   children: React.ReactNode;
@@ -16,8 +18,16 @@ const font = Jersey_25({
 export default async function Layout({ params, children }: Readonly<Props>) {
   return (
     <html className={font.className}>
-      <head></head>
-      <body className={styles.body}>{children}</body>
+      <head>
+        <meta name="color-scheme" content="dark light" />
+      </head>
+      <body>
+        <header className={styles.header}>
+          <p className={styles.name}>LunchBot</p>
+          <ThemeSwitcher />
+        </header>
+        {children}
+      </body>
       <Analytics />
     </html>
   );
