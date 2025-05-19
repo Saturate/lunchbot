@@ -1,13 +1,13 @@
 "use client";
 
 import styles from "./ThemeSwitcher.module.css";
-import clsx from "clsx";
 import { Sun, Moon } from "lucide-react";
 
 export default function ThemeSwitcher() {
-  const defaultCheck = window
-    ? window.matchMedia("(prefers-color-scheme: dark)").matches
-    : false;
+  const defaultCheck =
+    typeof window !== "undefined"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+      : false;
 
   return (
     <div>
@@ -17,7 +17,7 @@ export default function ThemeSwitcher() {
         className={styles.checkbox}
         id="checkbox"
         onClick={() => {
-          if (window) {
+          if (document) {
             document.querySelector("html").classList.toggle("light");
           }
         }}
