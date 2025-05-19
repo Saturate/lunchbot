@@ -1,5 +1,5 @@
 import { HTMLElement } from "node-html-parser";
-import unencodehtml from "../app/unencodehtml";
+import unencodehtml from "./unencodehtml";
 
 type MenuItems = { item: string; allergens: string }[] | undefined;
 

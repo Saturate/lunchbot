@@ -1,7 +1,6 @@
-import { Fragment } from "react";
 import { getMenu } from "./getMenu";
 import styles from "./page.module.css";
-import { format } from "date-fns";
+import { isWednesday } from "date-fns";
 import MenuSection from "../components/MenuSection";
 
 export async function generateMetadata() {
@@ -9,33 +8,28 @@ export async function generateMetadata() {
     title: "Meyers Menu - LunchBot",
   };
 }
-
-export default async function MainPage() {
+export default async function TodayPage() {
   const menu = await getMenu("det-velkendte");
+  const menuTwo = await getMenu("den-groenne");
+
+  const todaysMenu = isWednesday(new Date())
+    ? menuTwo.find((day) => day.today)
+    : menu.find((day) => day.today);
 
   return (
     <main className={styles.main}>
-      <p></p>
-      {menu.map((day) => {
-        const id = format(day.date, "ddLLyyyy");
-
-        return (
-          <section id={id} className={styles.day} key={day.dateFormatted}>
-            <a className={styles.dayHeaderLink} href={"#" + id}>
-              <h2 className={styles.dayHeader}>
-                <time dateTime={day.date.toISOString()}>
-                  {day.dateFormatted}
-                </time>
-              </h2>
-            </a>
-            {day.menuSections.map((section) => {
-              return (
-                <MenuSection menu={section} key={day.date + section.title} />
-              );
-            })}
-          </section>
-        );
-      })}
+      <section className={styles.day} key={todaysMenu.dateFormatted}>
+        <h2 className={styles.dayHeader}>
+          <time dateTime={todaysMenu.date.toISOString()}>
+            {todaysMenu.dateFormatted}
+          </time>
+        </h2>
+        {todaysMenu.menuSections.map((section) => {
+          return (
+            <MenuSection menu={section} key={todaysMenu.date + section.title} />
+          );
+        })}
+      </section>
     </main>
   );
 }

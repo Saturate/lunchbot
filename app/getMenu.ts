@@ -1,5 +1,5 @@
 import { parse } from "node-html-parser";
-import unencodehtml from "./unencodehtml";
+import unencodehtml from "../utils/unencodehtml";
 import { isToday } from "date-fns";
 import parseDescription from "../utils/parseDescription";
 import parseMeyerDate from "../utils/parseMeyerDate";
