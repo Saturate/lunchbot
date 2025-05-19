@@ -1,8 +1,8 @@
 import { parse } from "node-html-parser";
 import unencodehtml from "./unencodehtml";
 import { isToday } from "date-fns";
-import parseDescription from "./utils/parseDescription";
-import parseMeyerDate from "./utils/parseMeyerDate";
+import parseDescription from "../utils/parseDescription";
+import parseMeyerDate from "../utils/parseMeyerDate";
 
 export const menus = {
   "det-velkendte": {
