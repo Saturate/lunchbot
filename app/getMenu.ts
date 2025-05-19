@@ -1,13 +1,8 @@
 import { parse } from "node-html-parser";
 import unencodehtml from "./unencodehtml";
-import { parse as parseDate, formatRelative, subDays, isToday } from "date-fns";
-import { da } from "date-fns/locale";
+import { isToday } from "date-fns";
 import parseDescription from "./utils/parseDescription";
-
-function parseMeyerDate(date) {
-  // 23 maj, 2025
-  return parseDate(date, "dd LLL, yyyy", new Date(), { locale: da });
-}
+import parseMeyerDate from "./utils/parseMeyerDate";
 
 export const menus = {
   "det-velkendte": {
