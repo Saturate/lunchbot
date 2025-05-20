@@ -1,9 +1,9 @@
-import clsx from "clsx";
 import styles from "./layout.module.css";
 import "./global.css";
 import { Analytics } from "@vercel/analytics/next";
 import { Jersey_25 } from "next/font/google";
 import ThemeSwitcher from "../components/ThemeSwitcher";
+import Navigation from "../components/Navigation";
 
 type Props = {
   children: React.ReactNode;
@@ -24,6 +24,7 @@ export default async function Layout({ params, children }: Readonly<Props>) {
       <body>
         <header className={styles.header}>
           <p className={styles.name}>LunchBot</p>
+          <Navigation />
           <ThemeSwitcher />
         </header>
         {children}

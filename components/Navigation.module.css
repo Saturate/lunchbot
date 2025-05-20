@@ -1,0 +1,14 @@
+.nav {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  .link {
+    color: var(--text-color);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

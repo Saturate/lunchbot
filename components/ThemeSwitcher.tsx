@@ -10,7 +10,7 @@ export default function ThemeSwitcher() {
       : false;
 
   return (
-    <div>
+    <div className={styles.switcher}>
       <input
         type="checkbox"
         defaultChecked={defaultCheck}
