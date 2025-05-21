@@ -66,14 +66,12 @@ export async function GET(request: Request) {
   revalidatePath("/");
 
   const menu = await getMenu("det-velkendte");
-  const menuTwo = await getMenu("den-groenne");
-
-  const todaysMenu = isWednesday(new Date())
-    ? menuTwo.find((day) => day.today)
-    : menu.find((day) => day.today);
+  const todaysMenu = menu.find((day) => day.today);
 
   const payload = {
-    dayTitle: todaysMenu.dateFormatted,
+    dayTitle:
+      todaysMenu.dateFormatted +
+      (isWednesday(new Date()) ? "(Vegetarisk menu)" : ""),
     menuName: todaysMenu.menuName,
     hotDishTitle: removeLineBreaks(todaysMenu.menuSections[0].title),
     hotDishDescription: descriptionDisplay(

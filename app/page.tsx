@@ -13,11 +13,7 @@ export async function generateMetadata() {
 }
 export default async function TodayPage() {
   const menu = await getMenu("det-velkendte");
-  const menuTwo = await getMenu("den-groenne");
-
-  const todaysMenu = isWednesday(new Date())
-    ? menuTwo.find((day) => day.today)
-    : menu.find((day) => day.today);
+  const todaysMenu = menu.find((day) => day.today);
 
   return (
     <main className={styles.main}>
@@ -25,6 +21,7 @@ export default async function TodayPage() {
         <h2 className={styles.dayHeader}>
           <time dateTime={todaysMenu.date.toISOString()}>
             {todaysMenu.dateFormatted}
+            {isWednesday(new Date()) ? " (Vegetarisk menu)" : ""}
           </time>
         </h2>
         {todaysMenu.menuSections.map((section) => {
