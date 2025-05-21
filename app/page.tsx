@@ -3,6 +3,9 @@ import styles from "./page.module.css";
 import { isWednesday } from "date-fns";
 import MenuSection from "../components/MenuSection";
 
+// revalidate every 4 hours.
+export const revalidate = 14400;
+
 export async function generateMetadata() {
   return {
     title: "Meyers Menu - LunchBot",

@@ -1,5 +1,6 @@
 import { getDay } from "date-fns";
 import { getMenu } from "../../getMenu";
+import { revalidatePath } from "next/cache";
 
 type SlackPayload = {
   dayTitle: string;
@@ -62,6 +63,8 @@ function allergensDisplay(
 }
 
 export async function GET(request: Request) {
+  revalidatePath("/");
+
   const menu = await getMenu("det-velkendte");
   const menuTwo = await getMenu("den-groenne");
 
