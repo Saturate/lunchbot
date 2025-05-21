@@ -21,9 +21,11 @@ export default async function TodayPage() {
         <h2 className={styles.dayHeader}>
           <time dateTime={todaysMenu.date.toISOString()}>
             {todaysMenu.dateFormatted}
-            {isWednesday(new Date()) ? " (Vegetarisk menu)" : ""}
           </time>
         </h2>
+        {isWednesday(new Date()) ? (
+          <p className={styles.dayNote}> (Vegetarisk menu)</p>
+        ) : null}
         {todaysMenu.menuSections.map((section) => {
           return (
             <MenuSection menu={section} key={todaysMenu.date + section.title} />
