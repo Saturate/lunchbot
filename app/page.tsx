@@ -3,6 +3,9 @@ import styles from "./page.module.css";
 import { isWednesday } from "date-fns";
 import MenuSection from "../components/MenuSection";
 
+// revalidate every 4 hours.
+export const revalidate = 14400;
+
 export async function generateMetadata() {
   return {
     title: "Meyers Menu - LunchBot",
@@ -10,11 +13,7 @@ export async function generateMetadata() {
 }
 export default async function TodayPage() {
   const menu = await getMenu("det-velkendte");
-  const menuTwo = await getMenu("den-groenne");
-
-  const todaysMenu = isWednesday(new Date())
-    ? menuTwo.find((day) => day.today)
-    : menu.find((day) => day.today);
+  const todaysMenu = menu.find((day) => day.today);
 
   return (
     <main className={styles.main}>
@@ -24,6 +23,9 @@ export default async function TodayPage() {
             {todaysMenu.dateFormatted}
           </time>
         </h2>
+        {isWednesday(new Date()) ? (
+          <p className={styles.dayNote}> (Vegetarisk menu)</p>
+        ) : null}
         {todaysMenu.menuSections.map((section) => {
           return (
             <MenuSection menu={section} key={todaysMenu.date + section.title} />

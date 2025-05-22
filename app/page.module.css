@@ -10,8 +10,17 @@
   margin-top: 3em;
 }
 
+.day:last-child {
+  margin-bottom: 3em;
+}
+
 .dayHeader {
   font-size: 3.4em;
+}
+
+.dayNote {
+  font-size: 1.4em;
+  margin-top: -45px;
 }
 
 .dayHeaderLink {
