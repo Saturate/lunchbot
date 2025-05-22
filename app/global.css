@@ -7,7 +7,8 @@ html {
   box-sizing: inherit;
 }
 
-:root {
+:root,
+:root.dark {
   --background: #292c35;
   --background-darker: #1c1f27;
   --text-color: #e1e1e1;

@@ -18,7 +18,13 @@ export default function ThemeSwitcher() {
         id="checkbox"
         onClick={() => {
           if (document) {
-            document.querySelector("html").classList.toggle("light");
+            const darkModeDefault = window.matchMedia(
+              "(prefers-color-scheme: dark)"
+            ).matches;
+
+            document
+              .querySelector("html")
+              .classList.toggle(darkModeDefault ? "light" : "dark");
           }
         }}
       />
