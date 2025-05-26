@@ -3,5 +3,7 @@ import { da } from "date-fns/locale";
 
 export default function parseMeyerDate(date) {
   // 23 maj, 2025
-  return parseDate(date, "dd LLL, yyyy", new Date(), { locale: da });
+  return parseDate(date.replace("jun", "jun."), "dd MMM, yyyy", new Date(), {
+    locale: da,
+  });
 }
