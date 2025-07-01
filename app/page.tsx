@@ -15,11 +15,19 @@ export default async function TodayPage() {
   const menu = await getMenu("det-velkendte");
   const todaysMenu = menu.find((day) => day.today);
 
+  if (!todaysMenu) {
+    return (
+      <main className={styles.main}>
+        <section className={styles.day}>Could not find a menu.</section>
+      </main>
+    );
+  }
+
   return (
     <main className={styles.main}>
       <section className={styles.day} key={todaysMenu.dateFormatted}>
         <h2 className={styles.dayHeader}>
-          <time dateTime={todaysMenu.date.toISOString()}>
+          <time dateTime={todaysMenu.date?.toISOString()}>
             {todaysMenu.dateFormatted}
           </time>
         </h2>

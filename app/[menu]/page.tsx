@@ -27,7 +27,6 @@ export default async function Page({ params }) {
 
   return (
     <main className={styles.main}>
-      <p></p>
       {menu.map((day) => {
         const id = format(day.date, "ddLLyyyy");
 
