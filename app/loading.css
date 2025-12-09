@@ -1,0 +1,44 @@
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton-header {
+  height: 2em;
+  width: 60%;
+  background: var(--skeleton-bg, #e0e0e0);
+  border-radius: 0.25em;
+  animation: pulse 1.5s ease-in-out infinite;
+  margin-bottom: 1em;
+}
+
+.skeleton-title {
+  height: 1.5em;
+  width: 40%;
+  background: var(--skeleton-bg, #e0e0e0);
+  border-radius: 0.25em;
+  animation: pulse 1.5s ease-in-out infinite;
+  margin-bottom: 0.5em;
+}
+
+.skeleton-line-long {
+  height: 1em;
+  width: 80%;
+  background: var(--skeleton-bg, #e0e0e0);
+  border-radius: 0.25em;
+  animation: pulse 1.5s ease-in-out infinite;
+  margin-bottom: 0.25em;
+}
+
+.skeleton-line-medium {
+  height: 1em;
+  width: 70%;
+  background: var(--skeleton-bg, #e0e0e0);
+  border-radius: 0.25em;
+  animation: pulse 1.5s ease-in-out infinite;
+}

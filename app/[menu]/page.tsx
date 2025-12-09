@@ -1,52 +1,42 @@
-import styles from "../page.module.css";
 import { getMenu, menus } from "../getMenu";
-import MenuSection from "../../components/MenuSection";
-import { format } from "date-fns";
-import { notFound } from "next/navigation";
+import { format, isFuture } from "date-fns";
+import { redirect, notFound } from "next/navigation";
 
-export async function generateMetadata({ params }) {
-  const menuId = (await params).menu;
-
-  if (!Object.keys(menus).some((menu) => menu === menuId)) {
-    notFound();
-  }
-
-  return {
-    title: `${menus[menuId].contentTab} - Meyers Menu - LunchBot`,
-  };
+interface PageProps {
+  params: Promise<{
+    menu: string;
+  }>;
 }
 
-export default async function Page({ params }) {
-  const menuId = (await params).menu;
+// revalidate every 4 hours.
+export const revalidate = 14400;
+
+export default async function MenuRedirectPage({ params }: PageProps) {
+  const { menu: menuId } = await params;
 
   if (!Object.keys(menus).some((menu) => menu === menuId)) {
     notFound();
   }
 
-  const menu = await getMenu(menuId);
+  const validMenuId = menuId as keyof typeof menus;
+  const menu = await getMenu(validMenuId);
 
-  return (
-    <main className={styles.main}>
-      {menu.map((day) => {
-        const id = format(day.date, "ddLLyyyy");
+  let displayMenu = menu.find((day) => day.today);
 
-        return (
-          <section id={id} className={styles.day} key={day.dateFormatted}>
-            <a className={styles.dayHeaderLink} href={"#" + id}>
-              <h2 className={styles.dayHeader}>
-                <time dateTime={day.date.toISOString()}>
-                  {day.dateFormatted}
-                </time>
-              </h2>
-            </a>
-            {day.menuSections.map((section) => {
-              return (
-                <MenuSection menu={section} key={day.date + section.title} />
-              );
-            })}
-          </section>
-        );
-      })}
-    </main>
-  );
+  // If no menu for today, find the next available menu (for weekends)
+  if (!displayMenu) {
+    displayMenu = menu.find((day) => isFuture(day.date));
+  }
+
+  if (!displayMenu) {
+    displayMenu = menu[0];
+  }
+
+  if (displayMenu && displayMenu.date && !isNaN(displayMenu.date.getTime())) {
+    const dateStr = format(displayMenu.date, "yyyy-MM-dd");
+    redirect(`/${validMenuId}/${dateStr}`);
+  }
+
+  // Fallback - should never reach here
+  notFound();
 }

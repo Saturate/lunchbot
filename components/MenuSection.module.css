@@ -1,6 +1,17 @@
+.section {
+  padding: 1.2em clamp(1em, 3vw, 1.5em);
+  margin: 0 calc(-1 * clamp(1.5em, 4vw, 3em));
+  transition: background 0.2s ease;
+}
+
+.section:nth-child(odd) {
+  background: var(--section-bg-alt);
+}
+
 .header {
   font-size: 1.5em;
   margin-bottom: 0.4em;
+  margin-top: 0;
 }
 
 .allergens {

@@ -1,10 +1,14 @@
 import { HTMLElement } from "node-html-parser";
 import unencodehtml from "./unencodehtml";
 
-type MenuItems = { item: string; allergens: string }[] | undefined;
+type MenuItems = { item: string; allergens: string }[];
 
-export default function parseDescription(menuNode: HTMLElement): MenuItems {
-  const menuItems = [];
+export default function parseDescription(menuNode: HTMLElement | null): MenuItems {
+  if (!menuNode) {
+    return [];
+  }
+
+  const menuItems: MenuItems = [];
   menuNode.childNodes.forEach((innerNode, index, arr) => {
     if (innerNode.nodeType === 3 && innerNode.innerText.trim() !== "") {
       const siblingNodesAfter = menuNode.childNodes.slice(
@@ -13,7 +17,7 @@ export default function parseDescription(menuNode: HTMLElement): MenuItems {
       );
 
       // Find the next allergen node, or break on finding a new menu item node
-      let allergens = undefined;
+      let allergens = "";
       for (let i = 0; i < siblingNodesAfter.length; i++) {
         if (siblingNodesAfter[i].nodeType === 3) {
           break;
@@ -29,7 +33,7 @@ export default function parseDescription(menuNode: HTMLElement): MenuItems {
 
       menuItems.push({
         item: unencodehtml(innerNode.innerText.trim()),
-        allergens: allergens ? unencodehtml(allergens) : allergens,
+        allergens: allergens ? unencodehtml(allergens) : "",
       });
     }
   });

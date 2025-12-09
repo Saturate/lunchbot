@@ -3,8 +3,9 @@ import unencodehtml from "../utils/unencodehtml";
 import { isToday } from "date-fns";
 import parseDescription from "../utils/parseDescription";
 import parseMeyerDate from "../utils/parseMeyerDate";
+import { DayMenu, Menus } from "../types/menu";
 
-export const menus = {
+export const menus: Menus = {
   "det-velkendte": {
     url: "https://meyers.dk/erhverv/frokostordning/det-velkendte/",
     contentTab: "Det velkendte",
@@ -15,14 +16,21 @@ export const menus = {
   },
 };
 
-export async function getMenu(menuId: keyof typeof menus) {
-  const response = await fetch(menus[menuId].url).then((response) => {
+export async function getMenu(menuId: keyof typeof menus): Promise<DayMenu[]> {
+  const response = await fetch(menus[menuId].url, {
+    next: { revalidate: 14400 }
+  }).then((response) => {
     return response.text();
   });
 
   const root = parse(response);
 
   const menuHtml = root?.querySelector(".week-menu");
+
+  if (!menuHtml) {
+    throw new Error("Could not find menu HTML on the page");
+  }
+
   const days = menuHtml
     .querySelectorAll(".week-menu-day__header li h5")
     .map((day) => {
@@ -34,17 +42,20 @@ export async function getMenu(menuId: keyof typeof menus) {
           '"]'
       );
 
+      if (!dayHtml) {
+        return null;
+      }
+
       const menuSections = dayHtml
         .querySelectorAll(".menu-recipe-display")
         .map((display) => {
+          const titleElement = display.querySelector(".menu-recipe-display__title");
           const description = display.querySelector(
             ".menu-recipe-display__description"
           );
 
           return {
-            title: unencodehtml(
-              display.querySelector(".menu-recipe-display__title").innerText
-            ),
+            title: unencodehtml(titleElement?.innerText || ""),
             menuItems: parseDescription(description),
           };
         });
@@ -60,7 +71,8 @@ export async function getMenu(menuId: keyof typeof menus) {
         today: isToday(menuDate),
         menuSections: menuSections,
       };
-    });
+    })
+    .filter((day) => day !== null) as DayMenu[];
 
   return days;
 }

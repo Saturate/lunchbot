@@ -1,7 +1,7 @@
-import { parse as parseDate, formatRelative, subDays, isToday } from "date-fns";
+import { parse as parseDate } from "date-fns";
 import { da } from "date-fns/locale";
 
-export default function parseMeyerDate(date) {
+export default function parseMeyerDate(date: string | null | undefined): Date {
   // 23 maj, 2025
   const monthMappings = {
     jan: "jan.",
@@ -18,7 +18,7 @@ export default function parseMeyerDate(date) {
     dec: "dec.",
   };
 
-  let formattedDate = date;
+  let formattedDate = date || "";
   for (const [short, full] of Object.entries(monthMappings)) {
     formattedDate = formattedDate.replace(short, full);
   }

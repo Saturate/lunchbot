@@ -1,45 +1,29 @@
 import { getMenu } from "./getMenu";
-import styles from "./page.module.css";
-import { isWednesday } from "date-fns";
-import MenuSection from "../components/MenuSection";
+import { format, isFuture } from "date-fns";
+import { redirect } from "next/navigation";
 
 // revalidate every 4 hours.
 export const revalidate = 14400;
 
-export async function generateMetadata() {
-  return {
-    title: "Meyers Menu - LunchBot",
-  };
-}
-export default async function TodayPage() {
+export default async function HomePage() {
   const menu = await getMenu("det-velkendte");
-  const todaysMenu = menu.find((day) => day.today);
 
-  if (!todaysMenu) {
-    return (
-      <main className={styles.main}>
-        <section className={styles.day}>Could not find a menu.</section>
-      </main>
-    );
+  let displayMenu = menu.find((day) => day.today);
+
+  // If no menu for today, find the next available menu (for weekends)
+  if (!displayMenu) {
+    displayMenu = menu.find((day) => isFuture(day.date));
   }
 
-  return (
-    <main className={styles.main}>
-      <section className={styles.day} key={todaysMenu.dateFormatted}>
-        <h2 className={styles.dayHeader}>
-          <time dateTime={todaysMenu.date?.toISOString()}>
-            {todaysMenu.dateFormatted}
-          </time>
-        </h2>
-        {isWednesday(new Date()) ? (
-          <p className={styles.dayNote}> (Vegetarisk menu)</p>
-        ) : null}
-        {todaysMenu.menuSections.map((section) => {
-          return (
-            <MenuSection menu={section} key={todaysMenu.date + section.title} />
-          );
-        })}
-      </section>
-    </main>
-  );
+  if (!displayMenu) {
+    displayMenu = menu[0];
+  }
+
+  if (displayMenu && displayMenu.date && !isNaN(displayMenu.date.getTime())) {
+    const dateStr = format(displayMenu.date, "yyyy-MM-dd");
+    redirect(`/det-velkendte/${dateStr}`);
+  }
+
+  // Fallback - should never reach here
+  redirect("/det-velkendte");
 }

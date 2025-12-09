@@ -1,14 +1,32 @@
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 1em;
+  background-color: var(--background-darker);
+  color: var(--foreground);
+  text-decoration: none;
+  border-radius: 0.25em;
+}
+
+.skipLink:focus {
+  left: 1em;
+  top: 1em;
+}
+
 .header {
   padding: 0.5em;
   background: var(--background-darker);
   margin-bottom: 1em;
   display: flex;
   align-items: center;
+  gap: 1em;
   transition: background 0.2s linear;
 
   .name {
     font-size: 1em;
     flex: 1;
     margin: 0;
+    white-space: nowrap;
   }
 }

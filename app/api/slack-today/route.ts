@@ -54,45 +54,68 @@ function descriptionDisplay(
   return menuItems.map((items) => removeLineBreaks(items.item)).join("\n");
 }
 
-function allergensDisplay(
-  menuItems: Awaited<
-    ReturnType<typeof getMenu>
-  >[0]["menuSections"][0]["menuItems"]
-) {
-  return menuItems.map((items) => removeLineBreaks(items.allergens)).join("\n");
-}
+export async function GET(_request: Request) {
+  try {
+    revalidatePath("/");
 
-export async function GET(request: Request) {
-  revalidatePath("/");
+    const menu = await getMenu("det-velkendte");
+    const todaysMenu = menu.find((day) => day.today);
 
-  const menu = await getMenu("det-velkendte");
-  const todaysMenu = menu.find((day) => day.today);
+    if (!todaysMenu) {
+      return Response.json(
+        { error: "No menu found for today" },
+        { status: 404 }
+      );
+    }
 
-  const payload = {
-    dayTitle:
-      todaysMenu.dateFormatted +
-      (isWednesday(new Date()) ? "(Vegetarisk menu)" : ""),
-    menuName: todaysMenu.menuName,
-    hotDishTitle: removeLineBreaks(todaysMenu.menuSections[0].title),
-    hotDishDescription: descriptionDisplay(
-      todaysMenu.menuSections[0].menuItems
-    ),
-    hotDishAllergens: undefined,
+    // Validate menu structure before accessing
+    if (!todaysMenu.menuSections || todaysMenu.menuSections.length < 4) {
+      return Response.json(
+        { error: "Menu structure is incomplete" },
+        { status: 500 }
+      );
+    }
 
-    deliTitle: removeLineBreaks(todaysMenu.menuSections[1].title),
-    deliDescription: descriptionDisplay(todaysMenu.menuSections[1].menuItems),
-    deliAllergens: undefined,
+    const payload = {
+      dayTitle:
+        todaysMenu.dateFormatted +
+        (isWednesday(new Date()) ? " (Vegetarisk menu)" : ""),
+      menuName: todaysMenu.menuName,
+      hotDishTitle: removeLineBreaks(todaysMenu.menuSections[0].title),
+      hotDishDescription: descriptionDisplay(
+        todaysMenu.menuSections[0].menuItems
+      ),
+      hotDishAllergens: "",
 
-    salatTitle: removeLineBreaks(todaysMenu.menuSections[2].title),
-    salatDescription: descriptionDisplay(todaysMenu.menuSections[2].menuItems),
-    salatAllergens: undefined,
+      deliTitle: removeLineBreaks(todaysMenu.menuSections[1].title),
+      deliDescription: descriptionDisplay(todaysMenu.menuSections[1].menuItems),
+      deliAllergens: "",
 
-    breadTitle: removeLineBreaks(todaysMenu.menuSections[3].title),
-    breadDescription: descriptionDisplay(todaysMenu.menuSections[3].menuItems),
-    breadAllergens: undefined,
-  };
+      salatTitle: removeLineBreaks(todaysMenu.menuSections[2].title),
+      salatDescription: descriptionDisplay(todaysMenu.menuSections[2].menuItems),
+      salatAllergens: "",
 
-  sendSlackMessage(process.env.SLACK_WEBHOOK, payload);
+      breadTitle: removeLineBreaks(todaysMenu.menuSections[3].title),
+      breadDescription: descriptionDisplay(todaysMenu.menuSections[3].menuItems),
+      breadAllergens: "",
+    };
 
-  return Response.json(payload);
+    if (process.env.SLACK_WEBHOOK) {
+      await sendSlackMessage(process.env.SLACK_WEBHOOK, payload);
+    } else {
+      console.warn("SLACK_WEBHOOK not configured, skipping Slack notification");
+    }
+
+    return Response.json(payload, {
+      headers: {
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=1800",
+      },
+    });
+  } catch (error) {
+    console.error("Error in slack-today route:", error);
+    return Response.json(
+      { error: "Failed to process menu", details: error instanceof Error ? error.message : "Unknown error" },
+      { status: 500 }
+    );
+  }
 }

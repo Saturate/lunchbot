@@ -1,8 +1,13 @@
 import styles from "./MenuSection.module.css";
+import { MenuSection as MenuSectionType } from "../types/menu";
 
-export default function MenuSection({ menu }) {
+interface MenuSectionProps {
+  menu: MenuSectionType;
+}
+
+export default function MenuSection({ menu }: MenuSectionProps) {
   return (
-    <>
+    <div className={styles.section}>
       <h4 className={styles.header}>{menu.title}</h4>
       {menu.menuItems.map(({ item, allergens }) => {
         return (
@@ -14,6 +19,6 @@ export default function MenuSection({ menu }) {
           </p>
         );
       })}
-    </>
+    </div>
   );
 }

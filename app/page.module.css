@@ -1,29 +1,162 @@
+/* Old multi-day view styles (kept for backward compatibility during migration) */
 .main {
   border: 1px solid #ccc;
-  padding: 0 3em;
+  padding: 0 clamp(1em, 5vw, 3em);
   max-width: 600px;
   margin: auto;
 }
 
 .day:not(:first-of-type) {
   border-top: 1px solid #ccc;
-  margin-top: 3em;
+  margin-top: clamp(1.5em, 5vw, 3em);
 }
 
 .day:last-child {
-  margin-bottom: 3em;
+  margin-bottom: clamp(1.5em, 5vw, 3em);
 }
 
 .dayHeader {
-  font-size: 3.4em;
+  font-size: clamp(2em, 8vw, 3.4em);
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .dayNote {
-  font-size: 1.4em;
-  margin-top: -45px;
+  font-size: clamp(1em, 4vw, 1.4em);
+  margin-top: clamp(-15px, -3vw, -25px);
+  text-align: center;
 }
 
 .dayHeaderLink {
   color: var(--text-color);
   text-decoration: none;
+  display: inline-block;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Card Navigation Layout */
+.cardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1em, 3vw, 2em);
+  padding: 2em clamp(1em, 3vw, 2em);
+  min-height: 60vh;
+}
+
+.cardMain {
+  flex: 0 1 600px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.card {
+  border: 1px solid rgba(128, 128, 128, 0.2);
+  border-radius: 1.5em;
+  padding: clamp(1.5em, 4vw, 3em);
+  background: var(--card-bg);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    0 5px 15px rgba(0, 0, 0, 0.15),
+    0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    0 5px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.cardHeader {
+  font-size: clamp(2em, 6vw, 2.8em);
+  margin: 0 0 0.5em 0;
+  word-wrap: break-word;
+  hyphens: auto;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.arrowButton {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(3em, 8vw, 4em);
+  height: clamp(3em, 8vw, 4em);
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  background: var(--background-darker);
+  color: var(--foreground);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arrowButton:hover {
+  background: var(--background);
+  border-color: var(--foreground);
+  border-width: 2px;
+  transform: scale(1.1);
+}
+
+.arrowButton:hover .arrowIcon {
+  opacity: 1;
+  stroke-width: 2.5;
+}
+
+.arrowButton:active {
+  transform: scale(0.95);
+}
+
+.arrowIcon {
+  width: clamp(1.5em, 5vw, 2em);
+  height: clamp(1.5em, 5vw, 2em);
+}
+
+.arrowPlaceholder {
+  flex: 0 0 auto;
+  width: clamp(3em, 8vw, 4em);
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  .main {
+    border-left: none;
+    border-right: none;
+  }
+
+  .cardContainer {
+    gap: 0.5em;
+    padding: 1em 0.5em;
+  }
+
+  .card {
+    border-radius: 0.5em;
+    padding: 1.5em 1em;
+  }
+
+  .arrowButton {
+    width: 2.5em;
+    height: 2.5em;
+  }
+
+  .arrowPlaceholder {
+    width: 2.5em;
+    height: 2.5em;
+  }
+}
+
+/* Large mobile and tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .main {
+    max-width: 90%;
+  }
+
+  .cardMain {
+    max-width: 90%;
+  }
 }

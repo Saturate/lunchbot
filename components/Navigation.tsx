@@ -1,16 +1,25 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { menus } from "../app/getMenu";
 import styles from "./Navigation.module.css";
 
 export default function Navigation() {
+  const pathname = usePathname();
+
   return (
-    <nav className={styles.nav}>
-      <Link className={styles.link} href={"/"}>
-        Dagens
-      </Link>
+    <nav className={styles.nav} aria-label="Main navigation">
       {Object.entries(menus).map(([id, { contentTab }]) => {
+        const isActive = pathname.startsWith(`/${id}`);
+
         return (
-          <Link className={styles.link} key={id} href={"/" + id}>
+          <Link
+            className={styles.link}
+            key={id}
+            href={`/${id}`}
+            aria-current={isActive ? "page" : undefined}
+          >
             {contentTab}
           </Link>
         );
