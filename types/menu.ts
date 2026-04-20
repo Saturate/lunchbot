@@ -18,14 +18,4 @@ export interface DayMenu {
   menuSections: MenuSection[];
 }
 
-export interface MenuInfo {
-  url: string;
-  contentTab: string;
-}
-
 export type MenuId = "det-velkendte" | "den-groenne";
-
-export interface Menus {
-  "det-velkendte": MenuInfo;
-  "den-groenne": MenuInfo;
-}

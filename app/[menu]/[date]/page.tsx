@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: PageProps) {
   }
 
   return {
-    title: `${menus[validMenuId].contentTab} - ${format(date, "EEEE d. MMMM", { locale: da })} - LunchBot`,
+    title: `${menus[validMenuId].name} - ${format(date, "EEEE d. MMMM", { locale: da })} - LunchBot`,
   };
 }
 

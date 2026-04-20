@@ -41,7 +41,7 @@ Lynsyltet gulerødder med knuste peanuts og karse                               
   expect(parsed).toMatchObject([
     {
       item: "Bagte kålrabi med agurker, grønne æbler, rødløg, bønnespirer, ananas og tamarind. Toppet med ristet sort sesam",
-      allergens: undefined,
+      allergens: "",
     },
     {
       item: "Gule nudler med gulerødder, pack choi, hvidkål og forårsløg vendt med chili og soja",

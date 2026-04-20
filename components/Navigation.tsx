@@ -10,7 +10,7 @@ export default function Navigation() {
 
   return (
     <nav className={styles.nav} aria-label="Main navigation">
-      {Object.entries(menus).map(([id, { contentTab }]) => {
+      {Object.entries(menus).map(([id, { name }]) => {
         const isActive = pathname.startsWith(`/${id}`);
 
         return (
@@ -20,7 +20,7 @@ export default function Navigation() {
             href={`/${id}`}
             aria-current={isActive ? "page" : undefined}
           >
-            {contentTab}
+            {name}
           </Link>
         );
       })}
