@@ -42,7 +42,11 @@ html {
 
 body {
   color-scheme: dark;
-  background: linear-gradient(135deg, var(--background-gradient-start) 0%, var(--background-gradient-end) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--background-gradient-start) 0%,
+    var(--background-gradient-end) 100%
+  );
   background-attachment: fixed;
   color: var(--text-color);
   transition: background 0.2s linear;

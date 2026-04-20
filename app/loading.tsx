@@ -4,7 +4,11 @@ import "./loading.css";
 export default function Loading() {
   return (
     <main className={styles.main}>
-      <section className={styles.day} aria-busy="true" aria-label="Loading menu">
+      <section
+        className={styles.day}
+        aria-busy="true"
+        aria-label="Loading menu"
+      >
         <div className="skeleton-header" />
         {[1, 2, 3, 4].map((i) => (
           <div key={i} style={{ marginBottom: "2em" }}>

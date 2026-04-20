@@ -1,10 +1,10 @@
 import styles from "./layout.module.css";
 import "./global.css";
 import { Analytics } from "@vercel/analytics/next";
-import { Jersey_25 } from "next/font/google";
 import type { Metadata, Viewport } from "next";
-import ThemeSwitcher from "../components/ThemeSwitcher";
+import { Jersey_25 } from "next/font/google";
 import Navigation from "../components/Navigation";
+import ThemeSwitcher from "../components/ThemeSwitcher";
 
 type Props = {
   children: React.ReactNode;

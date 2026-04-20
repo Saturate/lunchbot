@@ -1,5 +1,5 @@
+import type { MenuSection as MenuSectionType } from "../types/menu";
 import styles from "./MenuSection.module.css";
-import { MenuSection as MenuSectionType } from "../types/menu";
 
 interface MenuSectionProps {
   menu: MenuSectionType;

@@ -96,6 +96,11 @@
   transition: all 0.2s ease;
 }
 
+.arrowIcon {
+  width: clamp(1.5em, 5vw, 2em);
+  height: clamp(1.5em, 5vw, 2em);
+}
+
 .arrowButton:hover {
   background: var(--background);
   border-color: var(--foreground);
@@ -110,11 +115,6 @@
 
 .arrowButton:active {
   transform: scale(0.95);
-}
-
-.arrowIcon {
-  width: clamp(1.5em, 5vw, 2em);
-  height: clamp(1.5em, 5vw, 2em);
 }
 
 .arrowPlaceholder {

@@ -1,6 +1,6 @@
 import parse from "node-html-parser";
-import parseDescription from "./parseDescription";
 import { expect, test } from "vitest";
+import parseDescription from "./parseDescription";
 
 test("Parses common bread section ", () => {
   const root = parse(`   
@@ -12,7 +12,7 @@ test("Parses common bread section ", () => {
                                                             </p>`);
 
   const parsed = parseDescription(
-    root.querySelector(".menu-recipe-display__description")
+    root.querySelector(".menu-recipe-display__description"),
   );
   expect(parsed).toMatchObject([
     {
@@ -36,7 +36,7 @@ Lynsyltet gulerødder med knuste peanuts og karse                               
                                                             </p>`);
 
   const parsed = parseDescription(
-    root.querySelector(".menu-recipe-display__description")
+    root.querySelector(".menu-recipe-display__description"),
   );
   expect(parsed).toMatchObject([
     {

@@ -1,14 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Monitor, Moon, Sun } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./ThemeSwitcher.module.css";
-import { Sun, Moon, Monitor } from "lucide-react";
 
 type Theme = "light" | "dark" | "system";
 
 export default function ThemeSwitcher() {
   const [theme, setTheme] = useState<Theme>("system");
   const [mounted, setMounted] = useState(false);
+
+  const applyTheme = useCallback((newTheme: Theme) => {
+    const html = document.querySelector("html");
+    if (!html) return;
+
+    if (newTheme === "system") {
+      const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+      html.classList.remove("light", "dark");
+      html.classList.add(systemPrefersDark ? "dark" : "light");
+      localStorage.setItem("theme", "system");
+    } else {
+      html.classList.remove("light", "dark");
+      html.classList.add(newTheme);
+      localStorage.setItem("theme", newTheme);
+    }
+  }, []);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme") as Theme | null;
@@ -27,23 +45,7 @@ export default function ThemeSwitcher() {
 
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [theme]);
-
-  const applyTheme = (newTheme: Theme) => {
-    const html = document.querySelector("html");
-    if (!html) return;
-
-    if (newTheme === "system") {
-      const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      html.classList.remove("light", "dark");
-      html.classList.add(systemPrefersDark ? "dark" : "light");
-      localStorage.setItem("theme", "system");
-    } else {
-      html.classList.remove("light", "dark");
-      html.classList.add(newTheme);
-      localStorage.setItem("theme", newTheme);
-    }
-  };
+  }, [theme, applyTheme]);
 
   const handleThemeChange = (newTheme: Theme) => {
     setTheme(newTheme);
@@ -52,7 +54,11 @@ export default function ThemeSwitcher() {
 
   return (
     <div className={styles.switcherWrapper}>
-      <div className={styles.switcher} role="radiogroup" aria-label="Theme selection">
+      <div
+        className={styles.switcher}
+        role="radiogroup"
+        aria-label="Theme selection"
+      >
         <button
           type="button"
           className={`${styles.themeButton} ${theme === "light" ? styles.active : ""}`}

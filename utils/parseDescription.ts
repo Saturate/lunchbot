@@ -1,9 +1,11 @@
-import { HTMLElement } from "node-html-parser";
+import type { HTMLElement } from "node-html-parser";
 import unencodehtml from "./unencodehtml";
 
 type MenuItems = { item: string; allergens: string }[];
 
-export default function parseDescription(menuNode: HTMLElement | null): MenuItems {
+export default function parseDescription(
+  menuNode: HTMLElement | null,
+): MenuItems {
   if (!menuNode) {
     return [];
   }
@@ -13,7 +15,7 @@ export default function parseDescription(menuNode: HTMLElement | null): MenuItem
     if (innerNode.nodeType === 3 && innerNode.innerText.trim() !== "") {
       const siblingNodesAfter = menuNode.childNodes.slice(
         index + 1,
-        arr.length
+        arr.length,
       );
 
       // Find the next allergen node, or break on finding a new menu item node

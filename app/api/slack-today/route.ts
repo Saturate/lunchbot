@@ -1,6 +1,6 @@
 import { getDay } from "date-fns";
-import { getMenu } from "../../getMenu";
 import { revalidatePath } from "next/cache";
+import { getMenu } from "../../getMenu";
 
 type SlackPayload = {
   dayTitle: string;
@@ -49,7 +49,7 @@ function isWednesday(date: Date): boolean {
 function descriptionDisplay(
   menuItems: Awaited<
     ReturnType<typeof getMenu>
-  >[0]["menuSections"][0]["menuItems"]
+  >[0]["menuSections"][0]["menuItems"],
 ) {
   return menuItems.map((items) => removeLineBreaks(items.item)).join("\n");
 }
@@ -64,7 +64,7 @@ export async function GET(_request: Request) {
     if (!todaysMenu) {
       return Response.json(
         { error: "No menu found for today" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -72,7 +72,7 @@ export async function GET(_request: Request) {
     if (!todaysMenu.menuSections || todaysMenu.menuSections.length < 4) {
       return Response.json(
         { error: "Menu structure is incomplete" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -83,7 +83,7 @@ export async function GET(_request: Request) {
       menuName: todaysMenu.menuName,
       hotDishTitle: removeLineBreaks(todaysMenu.menuSections[0].title),
       hotDishDescription: descriptionDisplay(
-        todaysMenu.menuSections[0].menuItems
+        todaysMenu.menuSections[0].menuItems,
       ),
       hotDishAllergens: "",
 
@@ -92,11 +92,15 @@ export async function GET(_request: Request) {
       deliAllergens: "",
 
       salatTitle: removeLineBreaks(todaysMenu.menuSections[2].title),
-      salatDescription: descriptionDisplay(todaysMenu.menuSections[2].menuItems),
+      salatDescription: descriptionDisplay(
+        todaysMenu.menuSections[2].menuItems,
+      ),
       salatAllergens: "",
 
       breadTitle: removeLineBreaks(todaysMenu.menuSections[3].title),
-      breadDescription: descriptionDisplay(todaysMenu.menuSections[3].menuItems),
+      breadDescription: descriptionDisplay(
+        todaysMenu.menuSections[3].menuItems,
+      ),
       breadAllergens: "",
     };
 
@@ -114,8 +118,11 @@ export async function GET(_request: Request) {
   } catch (error) {
     console.error("Error in slack-today route:", error);
     return Response.json(
-      { error: "Failed to process menu", details: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
+      {
+        error: "Failed to process menu",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
     );
   }
 }

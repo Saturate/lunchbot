@@ -1,9 +1,8 @@
-import { isToday, format } from "date-fns";
+import { format, isToday } from "date-fns";
 import { da } from "date-fns/locale";
-import { DayMenu, MenuId } from "../types/menu";
+import type { DayMenu, MenuId } from "../types/menu";
 
-const MEYERS_URL =
-  "https://meyers.dk/erhverv/frokostordning/det-velkendte/";
+const MEYERS_URL = "https://meyers.dk/erhverv/frokostordning/det-velkendte/";
 
 export const menus: Record<MenuId, { name: string }> = {
   "det-velkendte": { name: "Det velkendte" },
@@ -26,7 +25,7 @@ function resolveRef(
   arr: unknown[],
   idx: number,
   depth = 0,
-  seen = new Set<number>()
+  seen = new Set<number>(),
 ): NuxtVal {
   if (depth > 60 || seen.has(idx) || idx >= arr.length) return null;
 
@@ -54,7 +53,7 @@ function resolveRef(
       return resolveRef(arr, val[1], depth + 1, next);
     }
     return val.map((el) =>
-      typeof el === "number" ? resolveRef(arr, el, depth + 1, next) : el
+      typeof el === "number" ? resolveRef(arr, el, depth + 1, next) : el,
     );
   }
 
@@ -99,7 +98,7 @@ interface FoodopEntry {
 
 function extractNuxtData(html: string): unknown[] {
   const match = html.match(
-    /<script[^>]*id="__NUXT_DATA__"[^>]*>([\s\S]*?)<\/script>/
+    /<script[^>]*id="__NUXT_DATA__"[^>]*>([\s\S]*?)<\/script>/,
   );
   if (!match) throw new Error("Could not find __NUXT_DATA__ in page");
   return JSON.parse(match[1]);

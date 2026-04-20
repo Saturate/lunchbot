@@ -1,6 +1,6 @@
-import { getMenu } from "./getMenu";
 import { format, isFuture } from "date-fns";
 import { redirect } from "next/navigation";
+import { getMenu } from "./getMenu";
 
 // revalidate every 4 hours.
 export const revalidate = 14400;
@@ -19,7 +19,7 @@ export default async function HomePage() {
     displayMenu = menu[0];
   }
 
-  if (displayMenu && displayMenu.date && !isNaN(displayMenu.date.getTime())) {
+  if (displayMenu?.date && !Number.isNaN(displayMenu.date.getTime())) {
     const dateStr = format(displayMenu.date, "yyyy-MM-dd");
     redirect(`/det-velkendte/${dateStr}`);
   }

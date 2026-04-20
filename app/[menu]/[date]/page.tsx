@@ -1,12 +1,11 @@
-import styles from "../../page.module.css";
-import { getMenu, menus } from "../../getMenu";
-import MenuSection from "../../../components/MenuSection";
-import { format, parse, isValid } from "date-fns";
+import { format, isValid, isWednesday, parse } from "date-fns";
 import { da } from "date-fns/locale";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { isWednesday } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import MenuSection from "../../../components/MenuSection";
+import { getMenu, menus } from "../../getMenu";
+import styles from "../../page.module.css";
 
 interface PageProps {
   params: Promise<{
@@ -22,7 +21,7 @@ export async function generateStaticParams() {
     try {
       const menu = await getMenu(menuId as keyof typeof menus);
       for (const day of menu) {
-        if (day.date && !isNaN(day.date.getTime())) {
+        if (day.date && !Number.isNaN(day.date.getTime())) {
           params.push({
             menu: menuId,
             date: format(day.date, "yyyy-MM-dd"),
@@ -73,7 +72,7 @@ export default async function DayPage({ params }: PageProps) {
   const menu = await getMenu(validMenuId);
 
   const dayIndex = menu.findIndex((day) => {
-    if (!day.date || isNaN(day.date.getTime())) return false;
+    if (!day.date || Number.isNaN(day.date.getTime())) return false;
     return format(day.date, "yyyy-MM-dd") === dateStr;
   });
 
@@ -85,18 +84,24 @@ export default async function DayPage({ params }: PageProps) {
   const prevDay = dayIndex > 0 ? menu[dayIndex - 1] : null;
   const nextDay = dayIndex < menu.length - 1 ? menu[dayIndex + 1] : null;
 
-  const prevUrl = prevDay && prevDay.date && !isNaN(prevDay.date.getTime())
-    ? `/${validMenuId}/${format(prevDay.date, "yyyy-MM-dd")}`
-    : null;
+  const prevUrl =
+    prevDay?.date && !Number.isNaN(prevDay.date.getTime())
+      ? `/${validMenuId}/${format(prevDay.date, "yyyy-MM-dd")}`
+      : null;
 
-  const nextUrl = nextDay && nextDay.date && !isNaN(nextDay.date.getTime())
-    ? `/${validMenuId}/${format(nextDay.date, "yyyy-MM-dd")}`
-    : null;
+  const nextUrl =
+    nextDay?.date && !Number.isNaN(nextDay.date.getTime())
+      ? `/${validMenuId}/${format(nextDay.date, "yyyy-MM-dd")}`
+      : null;
 
   return (
     <div className={styles.cardContainer}>
       {prevUrl ? (
-        <Link href={prevUrl} className={styles.arrowButton} aria-label="Previous day">
+        <Link
+          href={prevUrl}
+          className={styles.arrowButton}
+          aria-label="Previous day"
+        >
           <ChevronLeft className={styles.arrowIcon} />
         </Link>
       ) : (
@@ -107,7 +112,13 @@ export default async function DayPage({ params }: PageProps) {
         <article className={styles.card}>
           <header>
             <h1 className={styles.cardHeader}>
-              <time dateTime={currentDay.date && !isNaN(currentDay.date.getTime()) ? currentDay.date.toISOString() : undefined}>
+              <time
+                dateTime={
+                  currentDay.date && !Number.isNaN(currentDay.date.getTime())
+                    ? currentDay.date.toISOString()
+                    : undefined
+                }
+              >
                 {currentDay.dateFormatted}
               </time>
             </h1>
@@ -126,7 +137,11 @@ export default async function DayPage({ params }: PageProps) {
       </main>
 
       {nextUrl ? (
-        <Link href={nextUrl} className={styles.arrowButton} aria-label="Next day">
+        <Link
+          href={nextUrl}
+          className={styles.arrowButton}
+          aria-label="Next day"
+        >
           <ChevronRight className={styles.arrowIcon} />
         </Link>
       ) : (

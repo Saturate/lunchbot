@@ -1,6 +1,6 @@
-import { getMenu, menus } from "../getMenu";
 import { format, isFuture } from "date-fns";
-import { redirect, notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { getMenu, menus } from "../getMenu";
 
 interface PageProps {
   params: Promise<{
@@ -32,7 +32,7 @@ export default async function MenuRedirectPage({ params }: PageProps) {
     displayMenu = menu[0];
   }
 
-  if (displayMenu && displayMenu.date && !isNaN(displayMenu.date.getTime())) {
+  if (displayMenu?.date && !Number.isNaN(displayMenu.date.getTime())) {
     const dateStr = format(displayMenu.date, "yyyy-MM-dd");
     redirect(`/${validMenuId}/${dateStr}`);
   }
