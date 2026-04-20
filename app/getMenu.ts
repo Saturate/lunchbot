@@ -10,13 +10,10 @@ export const menus: Record<MenuId, { name: string }> = {
   "den-groenne": { name: "Den Grønne" },
 };
 
-type NuxtVal =
-  | string
-  | number
-  | boolean
-  | null
-  | NuxtVal[]
-  | Record<string, NuxtVal>;
+interface NuxtArray extends Array<NuxtVal> {}
+interface NuxtObject extends Record<string, NuxtVal> {}
+
+type NuxtVal = string | number | boolean | null | NuxtArray | NuxtObject;
 
 const REACTIVE_MARKERS = new Set([
   "ShallowReactive",
